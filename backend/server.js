@@ -13,6 +13,8 @@ app.use(express.json());
 const preguntas = [
     { pregunta: "¿Cuál es la capital de Francia?", opciones: ["Madrid", "París", "Berlín", "Roma"], correcta: 1 },
     { pregunta: "¿Cuánto es 2+2?", opciones: ["3", "4", "5", "6"], correcta: 1 },
+    { pregunta: "¿Quién fue el descubridor de las vacunas?", opciones: ["Edward Jener", "Louis Pasteur", "Alexander Flemming", "John Snow"], correcta: 0 },
+    { pregunta: "¿Cuándo se inició la vacunación COVID en España?", opciones: ["Febrero 2021", "Septiembre 2020", "Diciembre 2019", "Diciembre 2020"], correcta: 3 },
 ];
 
 let progresoGrupos = { grupo1: 0, grupo2: 0, grupo3: 0 };
