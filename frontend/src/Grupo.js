@@ -15,8 +15,8 @@ const Grupo = ({ grupo }) => {
     const responder = (indiceRespuesta) => {
         axios.post('https://nurserace-backend.onrender.com/responder', {
             grupo: "grupo1",
-            indexPregunta: 0, // indiceActual,
-            respuesta:1 // indiceRespuesta
+            indexPregunta: indiceActual,  // Asegurar que se usa la pregunta actual
+   	    respuesta: indiceRespuesta    // Enviar la opción seleccionada
         })
 	.then(response => {
             if (response.data.progreso > 0) {
