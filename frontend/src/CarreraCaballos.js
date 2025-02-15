@@ -6,6 +6,8 @@ const socket = io('https://nurserace-backend.onrender.com');
 const CarreraCaballos = () => {
     const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
     const [ganador, setGanador] = useState(null);
+    const [tiempo, setTiempo] = useState(0); // ⏱ Estado del cronómetro
+    const [enMarcha, setEnMarcha] = useState(false); // 🚦 Controla si el cronómetro está en marcha
 
     useEffect(() => {
         console.log("🔗 Conectando a WebSockets...");
@@ -13,10 +15,11 @@ const CarreraCaballos = () => {
             console.log("📡 Datos recibidos desde el backend:", nuevaCarrera);
             setProgreso(nuevaCarrera);
 
-            // Verificar si alguien ha ganado
+            // Verificar si algún grupo ha ganado y detener el cronómetro
             Object.entries(nuevaCarrera).forEach(([grupo, avance]) => {
                 if (avance >= 20) {
                     setGanador(grupo);
+                    setEnMarcha(false); // ⏹ Detiene el cronómetro cuando hay ganador
                 }
             });
         });
@@ -25,6 +28,24 @@ const CarreraCaballos = () => {
             socket.off('actualizarCarrera');
         };
     }, []);
+
+    useEffect(() => {
+        let intervalo;
+        if (enMarcha) {
+            intervalo = setInterval(() => {
+                setTiempo((prevTiempo) => prevTiempo + 1);
+            }, 1000);
+        } else {
+            clearInterval(intervalo);
+        }
+        return () => clearInterval(intervalo);
+    }, [enMarcha]);
+
+    const iniciarCarrera = () => {
+        setTiempo(0); // 🔄 Reinicia el tiempo
+        setGanador(null); // 🔄 Reinicia el ganador
+        setEnMarcha(true); // ▶️ Inicia el cronómetro
+    };
 
     return (
         <div style={{
@@ -48,6 +69,34 @@ const CarreraCaballos = () => {
                 🏇 Carrera de Caballos 🏇
             </h1>
 
+            {/* ⏱ Mostrar el tiempo en la pantalla */}
+            <h2 style={{
+                color: 'yellow',
+                fontSize: '2em',
+                textShadow: '2px 2px 4px black'
+            }}>
+                ⏱ Tiempo: {tiempo} segundos
+            </h2>
+
+            {/* 🔘 Botón de Start */}
+            {!enMarcha && !ganador && (
+                <button 
+                    onClick={iniciarCarrera} 
+                    style={{
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        backgroundColor: '#007bff',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        marginBottom: '20px'
+                    }}
+                >
+                    Start
+                </button>
+            )}
+
             {ganador ? (
                 <h2 style={{
                     color: 'yellow',
@@ -55,7 +104,7 @@ const CarreraCaballos = () => {
                     textShadow: '2px 2px 4px black',
                     marginBottom: '20px'
                 }}>
-                    🎉 ¡{ganador} ha ganado! 🎉
+                    🎉 ¡{ganador} ha ganado en {tiempo} segundos! 🎉
                 </h2>
             ) : (
                 <div style={{
