@@ -66,7 +66,7 @@ const CarreraCaballos = () => {
                 textShadow: '2px 2px 4px black',
                 marginBottom: '20px'
             }}>
-                🏇 Carrera de Caballos 🏇
+                🐪 Carrera de Camellos 🐪
             </h1>
 
             {/* ⏱ Mostrar el tiempo en la pantalla */}
