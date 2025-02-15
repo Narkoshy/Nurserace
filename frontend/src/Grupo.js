@@ -13,7 +13,7 @@ const Grupo = ({ grupo }) => {
     }, []);
 
     const responder = (indiceRespuesta) => {
-        axios.post('https://nurserace-backend.onrender.com/respuesta', {
+        axios.post('https://nurserace-backend.onrender.com/responder', {
             grupo: "grupo1",
             indexPregunta: 0, // indiceActual,
             respuesta:1 // indiceRespuesta
