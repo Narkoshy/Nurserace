@@ -7,7 +7,7 @@ const Grupo = ({ grupo }) => {
     const [mensaje, setMensaje] = useState("");
 
     useEffect(() => {
-        axios.get('https://nurserace-backend.onrender.com')
+        axios.get('https://nurserace-backend.onrender.com/preguntas')
             .then(response => setPreguntas(response.data))
             .catch(error => console.error(error));
     }, []);
