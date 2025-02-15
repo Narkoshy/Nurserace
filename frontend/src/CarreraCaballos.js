@@ -62,7 +62,7 @@ const CarreraCaballos = () => {
         }}>
             <h1 style={{
                 color: 'white',
-                fontSize: '2em',
+                fontSize: '4em',
                 textShadow: '2px 2px 4px black',
                 marginBottom: '20px'
             }}>
@@ -71,7 +71,7 @@ const CarreraCaballos = () => {
 
             {/* ⏱ Mostrar el tiempo en la pantalla */}
             <h2 style={{
-                color: 'yellow',
+                color: 'green',
                 fontSize: '2em',
                 textShadow: '2px 2px 4px black'
             }}>
