@@ -34,7 +34,7 @@ app.get('/preguntas', (req, res) => {
 
 app.post('/responder', (req, res) => {
     const { grupo, indexPregunta, respuesta } = req.body;
-    if (preguntas[indexPregunta].correcta === parseInt(respuesta) {
+    if (preguntas[indexPregunta].correcta === parseInt(respuesta)) {
         progresoGrupos[grupo]++;
     } else {
         progresoGrupos[grupo] = 0;
