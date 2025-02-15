@@ -7,13 +7,13 @@ const Grupo = ({ grupo }) => {
     const [mensaje, setMensaje] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:4000/preguntas')
+        axios.get('https://nurserace-backend.onrender.com')
             .then(response => setPreguntas(response.data))
             .catch(error => console.error(error));
     }, []);
 
     const responder = (indiceRespuesta) => {
-        axios.post('http://localhost:4000/responder', {
+        axios.post('https://nurserace-backend.onrender.com/respuesta', {
             grupo,
             indexPregunta: indiceActual,
             respuesta: indiceRespuesta

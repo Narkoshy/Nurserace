@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://nurserace-backend.onrender.com');
 
 const CarreraCaballos = () => {
     const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
