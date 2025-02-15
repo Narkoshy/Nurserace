@@ -17,6 +17,12 @@ const preguntas = [
 
 let progresoGrupos = { grupo1: 0, grupo2: 0, grupo3: 0 };
 
+app.post('/reiniciar', (req, res) => {
+    progresoGrupos = { grupo1: 0, grupo2: 0, grupo3: 0 };
+    io.emit('actualizarCarrera', progresoGrupos);
+    res.json({ mensaje: "Progreso reiniciado" });
+});
+
 app.get('/preguntas', (req, res) => {
     res.json([
         { pregunta: "¿Cuál es la capital de Francia?", opciones: ["Madrid", "París", "Londres", "Berlín"], correcta: 1 },
