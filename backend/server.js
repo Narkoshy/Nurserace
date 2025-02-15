@@ -18,7 +18,10 @@ const preguntas = [
 let progresoGrupos = { grupo1: 0, grupo2: 0, grupo3: 0 };
 
 app.get('/preguntas', (req, res) => {
-    res.json(preguntas);
+    res.json([
+        { pregunta: "¿Cuál es la capital de Francia?", opciones: ["Madrid", "París", "Londres", "Berlín"], correcta: 1 },
+        { pregunta: "¿Cuánto es 2+2?", opciones: ["3", "4", "5", "6"], correcta: 1 }
+    ]);
 });
 
 app.post('/responder', (req, res) => {
