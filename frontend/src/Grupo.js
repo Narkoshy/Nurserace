@@ -14,10 +14,11 @@ const Grupo = ({ grupo }) => {
 
     const responder = (indiceRespuesta) => {
         axios.post('https://nurserace-backend.onrender.com/respuesta', {
-            grupo,
-            indexPregunta: indiceActual,
-            respuesta: indiceRespuesta
-        }).then(response => {
+            grupo: "grupo1",
+            indexPregunta: 0, // indiceActual,
+            respuesta:1 // indiceRespuesta
+        })
+	.then(response => {
             if (response.data.progreso > 0) {
                 setIndiceActual(indiceActual + 1);
                 setMensaje("✅ ¡Correcto!");
@@ -25,7 +26,8 @@ const Grupo = ({ grupo }) => {
                 setIndiceActual(0);
                 setMensaje("❌ Incorrecto, vuelves al inicio.");
             }
-        });
+        })
+			.catch(error => console.error("Error en la respuesta:", error));
     };
 
     return (
@@ -69,4 +71,4 @@ const Grupo = ({ grupo }) => {
     );
 };
 
-export default Grupo;
+export default Grupo
