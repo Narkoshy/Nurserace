@@ -1,47 +1,26 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./components/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import Grupo1 from "./pages/Grupo1";
+import Grupo2 from "./pages/Grupo2";
+import Grupo3 from "./pages/Grupo3";
+import Carrera from "./pages/Carrera";
 
-export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate(); // Asegúrate de que useNavigate() se está importando bien.
-
-  const handleLogin = () => {
-    if (username === "BSA" && password === "infermeria") {
-      localStorage.setItem("authenticated", "true");
-      navigate("/dashboard"); // Redirige al usuario
-    } else {
-      setError("Usuario o contraseña incorrectos");
-    }
-  };
-
+function App() {
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Acceso</h2>
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        <input
-          type="text"
-          placeholder="Usuario"
-          className="w-full p-2 border rounded mb-3"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          className="w-full p-2 border rounded mb-3"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          onClick={handleLogin}
-        >
-          Iniciar sesión
-        </button>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/grupo1" element={<ProtectedRoute><Grupo1 /></ProtectedRoute>} />
+        <Route path="/grupo2" element={<ProtectedRoute><Grupo2 /></ProtectedRoute>} />
+        <Route path="/grupo3" element={<ProtectedRoute><Grupo3 /></ProtectedRoute>} />
+        <Route path="/carrera" element={<ProtectedRoute><Carrera /></ProtectedRoute>} />
+      </Routes>
+    </Router>
   );
 }
+
+export default App;
