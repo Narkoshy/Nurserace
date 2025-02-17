@@ -10,7 +10,7 @@ export default function Login() {
   const handleLogin = () => {
     if (username === "BSA" && password === "infermeria") {
       localStorage.setItem("authenticated", "true");
-      navigate("/dashboard"); // Redirige a la página principal
+      navigate("/dashboard");
     } else {
       setError("Usuario o contraseña incorrectos");
     }
