@@ -1,34 +1,47 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Grupo from "./Grupo";
-import CarreraCaballos from "./CarreraCaballos";
-import Login from "./components/Login"; // Importamos la pantalla de login
-import ProtectedRoute from "./components/ProtectedRoute"; // Importamos la ruta protegida
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function App() {
+export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    if (username === "BSA" && password === "infermeria") {
+      localStorage.setItem("authenticated", "true");
+      navigate("/dashboard"); // Redirige a la página principal
+    } else {
+      setError("Usuario o contraseña incorrectos");
+    }
+  };
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route 
-          path="/grupo1" 
-          element={<ProtectedRoute><Grupo grupo="grupo1" /></ProtectedRoute>} 
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-xl shadow-md w-96">
+        <h2 className="text-2xl font-bold mb-4 text-center">Acceso</h2>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        <input
+          type="text"
+          placeholder="Usuario"
+          className="w-full p-2 border rounded mb-3"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
-        <Route 
-          path="/grupo2" 
-          element={<ProtectedRoute><Grupo grupo="grupo2" /></ProtectedRoute>} 
+        <input
+          type="password"
+          placeholder="Contraseña"
+          className="w-full p-2 border rounded mb-3"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <Route 
-          path="/grupo3" 
-          element={<ProtectedRoute><Grupo grupo="grupo3" /></ProtectedRoute>} 
-        />
-        <Route 
-          path="/carrera" 
-          element={<ProtectedRoute><CarreraCaballos /></ProtectedRoute>} 
-        />
-      </Routes>
-    </Router>
+        <button
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          onClick={handleLogin}
+        >
+          Iniciar sesión
+        </button>
+      </div>
+    </div>
   );
 }
-
-export default App;
