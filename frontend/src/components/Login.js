@@ -26,7 +26,7 @@ export default function Login() {
   return (
    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-500 to-purple-500">
   <div className="bg-white p-10 rounded-xl shadow-lg w-96 text-center space-y-6"> {/* <-- Aquí añadimos `space-y-6` */}
-    <h2 className="text-3xl font-bold text-gray-700">Acceso</h2>
+    <h2 className="text-3xl font-bold text-gray-700">Bienvenid@ Nurse Race</h2>
     
     {error && <p className="text-red-500 text-sm">{error}</p>}
     
