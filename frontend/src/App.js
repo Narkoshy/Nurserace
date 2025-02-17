@@ -3,7 +3,7 @@ import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard"; // Si está en /pages
 import Grupo from "./Grupo"; // Si está en /src/
-import CarreraCaballos from "./CarreraDeCaballos"; // Si está en /src/
+import CarreraCaballos from "./CarreraCaballos"; // Si está en /src/
 
 function App() {
   return (
