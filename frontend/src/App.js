@@ -5,12 +5,12 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Asegúrate de que useNavigate() se está importando bien.
 
   const handleLogin = () => {
     if (username === "BSA" && password === "infermeria") {
       localStorage.setItem("authenticated", "true");
-      navigate("/dashboard"); // Redirige a la página principal
+      navigate("/dashboard"); // Redirige al usuario
     } else {
       setError("Usuario o contraseña incorrectos");
     }
