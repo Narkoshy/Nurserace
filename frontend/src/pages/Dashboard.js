@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./dashboard.css"; // Importamos el archivo CSS
+import "../pages/dashboard.css"; // Importamos el archivo CSS
 
 export default function Dashboard() {
   const navigate = useNavigate();
