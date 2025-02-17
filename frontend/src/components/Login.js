@@ -1,47 +1,70 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock } from "react-icons/fa";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    if (username === "BSA" && password === "infermeria") {
-      localStorage.setItem("authenticated", "true");
-      navigate("/dashboard");
-    } else {
-      setError("Usuario o contraseña incorrectos");
-    }
+    setLoading(true);
+    setTimeout(() => {
+      if (username === "BSA" && password === "infermeria") {
+        localStorage.setItem("authenticated", "true");
+        navigate("/dashboard");
+      } else {
+        setError("Usuario o contraseña incorrectos");
+        setLoading(false);
+      }
+    }, 1000);
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Acceso</h2>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-500 to-purple-500">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
+        <h2 className="text-3xl font-bold text-gray-700 mb-4">Acceso</h2>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-        <input
-          type="text"
-          placeholder="Usuario"
-          className="w-full p-2 border rounded mb-3"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          className="w-full p-2 border rounded mb-3"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="relative mb-3">
+          <FaUser className="absolute left-3 top-3 text-gray-500" />
+          <input
+            type="text"
+            placeholder="Usuario"
+            className="w-full pl-10 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="relative mb-3">
+          <FaLock className="absolute left-3 top-3 text-gray-500" />
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Contraseña"
+            className="w-full pl-10 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            className="absolute right-3 top-2 text-gray-500"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? "🙈" : "👁"}
+          </button>
+        </div>
         <button
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className={`w-full text-white p-2 rounded-md ${
+            loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+          }`}
           onClick={handleLogin}
+          disabled={loading}
         >
-          Iniciar sesión
+          {loading ? "Cargando..." : "Iniciar sesión"}
         </button>
       </div>
     </div>
   );
 }
+
