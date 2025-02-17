@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
@@ -10,7 +10,6 @@ import Carrera from "./pages/Carrera";
 
 function App() {
   return (
-    <Router>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -19,7 +18,6 @@ function App() {
         <Route path="/grupo3" element={<ProtectedRoute><Grupo3 /></ProtectedRoute>} />
         <Route path="/carrera" element={<ProtectedRoute><Carrera /></ProtectedRoute>} />
       </Routes>
-    </Router>
   );
 }
 
