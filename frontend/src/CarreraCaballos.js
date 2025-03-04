@@ -104,7 +104,7 @@ const CarreraCaballos = () => {
                     textShadow: '2px 2px 4px black',
                     marginBottom: '20px'
                 }}>
-                    🎉 ¡{Ganador} ha guanyat en {tiempo} segons! 🎉
+                    🎉 ¡{ganador} ha guanyat en {tiempo} segons! 🎉
                 </h2>
             ) : (
                 <div style={{
