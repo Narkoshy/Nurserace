@@ -45,7 +45,7 @@ export default function Login() {
         </div>
 
         <button className="login-button" onClick={handleLogin}>
-          Iniciar sesión
+          Iniciar sessió
         </button>
       </div>
     </div>
