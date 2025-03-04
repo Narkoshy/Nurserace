@@ -127,7 +127,7 @@ const CarreraCaballos = () => {
                                 marginBottom: '5px',
                                 fontSize: '1.5em'
                             }}>
-                                {grupo}
+                                {grupo === "grupo1" ? "Grup 1" : grupo === "grupo2" ? "Grup 2" : "Grup 3"}
                             </h2>
                             <div style={{
                                 width: '100%',
