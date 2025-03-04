@@ -21,13 +21,13 @@ const Grupo = ({ grupo }) => {
 	.then(response => {
             if (response.data.progreso > 0) {
                 setIndiceActual(indiceActual + 1);
-                setMensaje("✅ ¡Correcto!");
+                setMensaje("✅ ¡Correcte!");
             } else {
                 setIndiceActual(0);
-                setMensaje("❌ Incorrecto, vuelves al inicio.");
+                setMensaje("❌ Incorrecte, tornes a l'inici.");
             }
         })
-			.catch(error => console.error("Error en la respuesta:", error));
+			.catch(error => console.error("Error en la resposta:", error));
     };
 
     return (
@@ -65,7 +65,7 @@ const Grupo = ({ grupo }) => {
                         </button>
                     ))}
                 </div>
-            ) : <h2>🏆 ¡Has completado todas las preguntas!</h2>}
+            ) : <h2>🏆 ¡Has completat totes les preguntes!</h2>}
             <p style={{ fontSize: '1.2em', fontWeight: 'bold', marginTop: '20px' }}>{mensaje}</p>
         </div>
     );

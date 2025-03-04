@@ -1,3 +1,3 @@
 export default function Grupo3() {
-  return <h1>Página de Grupo 3</h1>;
+  return <h1>Pàgina de grup 3</h1>;
 }

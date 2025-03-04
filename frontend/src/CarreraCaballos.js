@@ -66,7 +66,7 @@ const CarreraCaballos = () => {
                 textShadow: '2px 2px 4px black',
                 marginBottom: '20px'
             }}>
-                🐪 Carrera de Camellos 🐪
+                🐪 Carrera de Camells 🐪
             </h1>
 
             {/* ⏱ Mostrar el tiempo en la pantalla */}
@@ -75,7 +75,7 @@ const CarreraCaballos = () => {
                 fontSize: '2em',
                 textShadow: '2px 2px 4px black'
             }}>
-                ⏱ Tiempo: {tiempo} segundos
+                ⏱ Temps: {tiempo} segons
             </h2>
 
             {/* 🔘 Botón de Start */}
@@ -104,7 +104,7 @@ const CarreraCaballos = () => {
                     textShadow: '2px 2px 4px black',
                     marginBottom: '20px'
                 }}>
-                    🎉 ¡{ganador} ha ganado en {tiempo} segundos! 🎉
+                    🎉 ¡{Guanyador} ha guanyat en {tiempo} segons! 🎉
                 </h2>
             ) : (
                 <div style={{

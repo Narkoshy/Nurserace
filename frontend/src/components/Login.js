@@ -21,7 +21,7 @@ export default function Login() {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2 className="login-title">Juegos Nurse Race 🔑 Iniciar Sesión</h2>
+        <h2 className="login-title">Jocs Nurse Race 🔑 Iniciar Sessió</h2>
 
         {error && <p className="error-message">{error}</p>}
 
@@ -34,12 +34,11 @@ export default function Login() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-
         <div className="input-group">
           <FaLock className="input-icon" />
           <input
             type="password"
-            placeholder="Contraseña"
+            placeholder="Contrasenya"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
