@@ -10,15 +10,8 @@ const io = socketIo(server, { cors: { origin: "*" } });
 app.use(cors());
 app.use(express.json());
 
-app.get('/preguntes', (req, res) => {
-    res.json(preguntes);
-});
-
-app.get('/preguntas', (req, res) => {
-    res.json(preguntes); // Permitir compatibilidad con español
-});
-
-const preguntas = [
+// 🔹 Definir la variable de preguntas ANTES de usarlas
+const preguntes = [
     { 
         pregunta: "Qui va descobrir les vacunes?", 
         opciones: ["Edward Jener", "Louis Pasteur", "Alexander Fleming", "Cristina i Sara"], 
@@ -147,16 +140,20 @@ const preguntas = [
 
 ];
 
-// Estat de la cursa (Progrés de cada grup)
-let progresGrups = { grup1: 0, grup2: 0, grup3: 0 };
-let cursaFinalitzada = false; // 🔴 Controla si la cursa ha acabat
-
-// 🟢 Endpoint per obtenir preguntes
-app.get('/preguntas', (req, res) => {
-    res.json(preguntas);
+// 🔹 Rutas del backend
+app.get('/preguntes', (req, res) => {
+    res.json(preguntes);
 });
 
-// 🟢 Endpoint per respondre preguntes i actualitzar progrés
+app.get('/preguntas', (req, res) => {
+    res.json(preguntes); // Para compatibilidad con español
+});
+
+// 🔹 Estado de la carrera
+let progresGrups = { grup1: 0, grup2: 0, grup3: 0 };
+let cursaFinalitzada = false; 
+
+// 🔹 Ruta para procesar respuestas
 app.post('/respon', (req, res) => {
     console.log("📩 Dades rebudes:", req.body);
     const { grup, indexPregunta, resposta } = req.body;
@@ -165,39 +162,36 @@ app.post('/respon', (req, res) => {
         return res.json({ missatge: "🏁 La cursa ha acabat. Reinicieu per jugar de nou." });
     }
 
-    if (preguntas[indexPregunta].correcta === parseInt(resposta)) {
+    if (preguntes[indexPregunta].correcta === parseInt(resposta)) {
         progresGrups[grup]++;
     } else {
         progresGrups[grup] = 0;
     }
 
-    // 🔴 Si un grup arriba a 20, la cursa acaba i no pot sumar més punts
     if (progresGrups[grup] >= 20) {
         cursaFinalitzada = true;
         console.log(`🏆 ${grup} ha guanyat la cursa!`);
     }
 
-    // Enviar actualització a tots els clients
     io.emit('actualitzarCursa', progresGrups);
     res.json({ progres: progresGrups[grup] });
 });
 
-// 🟢 Reiniciar la cursa
+// 🔹 Evento de reinicio de carrera
 io.on('connection', (socket) => {
     console.log('🟢 Nou client connectat');
 
-    // Enviar estat inicial de la cursa
     socket.emit('actualitzarCursa', progresGrups);
 
     socket.on('reiniciarCursa', () => {
         console.log("🔄 Reiniciant la cursa...");
         progresGrups = { grup1: 0, grup2: 0, grup3: 0 };
-        cursaFinalitzada = false; // 🟢 Permetre jugar de nou
+        cursaFinalitzada = false;
         io.emit('actualitzarCursa', progresGrups);
     });
 
     socket.on('disconnect', () => console.log('🔴 Client desconnectat'));
 });
 
-// 🟢 Iniciar servidor
+// 🔹 Iniciar servidor
 server.listen(4000, () => console.log('🚀 Servidor funcionant al port 4000'));
