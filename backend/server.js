@@ -10,6 +10,14 @@ const io = socketIo(server, { cors: { origin: "*" } });
 app.use(cors());
 app.use(express.json());
 
+app.get('/preguntes', (req, res) => {
+    res.json(preguntes);
+});
+
+app.get('/preguntas', (req, res) => {
+    res.json(preguntes); // Permitir compatibilidad con español
+});
+
 const preguntas = [
     { 
         pregunta: "Qui va descobrir les vacunes?", 
@@ -144,8 +152,8 @@ let progresGrups = { grup1: 0, grup2: 0, grup3: 0 };
 let cursaFinalitzada = false; // 🔴 Controla si la cursa ha acabat
 
 // 🟢 Endpoint per obtenir preguntes
-app.get('/preguntes', (req, res) => {
-    res.json(preguntes);
+app.get('/preguntas', (req, res) => {
+    res.json(preguntas);
 });
 
 // 🟢 Endpoint per respondre preguntes i actualitzar progrés
@@ -157,7 +165,7 @@ app.post('/respon', (req, res) => {
         return res.json({ missatge: "🏁 La cursa ha acabat. Reinicieu per jugar de nou." });
     }
 
-    if (preguntes[indexPregunta].correcta === parseInt(resposta)) {
+    if (preguntas[indexPregunta].correcta === parseInt(resposta)) {
         progresGrups[grup]++;
     } else {
         progresGrups[grup] = 0;
