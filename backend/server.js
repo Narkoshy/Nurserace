@@ -10,7 +10,7 @@ const io = socketIo(server, { cors: { origin: "*" } });
 app.use(cors());
 app.use(express.json());
 
-const preguntes = [
+const preguntas = [
     { 
         pregunta: "Qui va descobrir les vacunes?", 
         opciones: ["Edward Jener", "Louis Pasteur", "Alexander Fleming", "Cristina i Sara"], 
