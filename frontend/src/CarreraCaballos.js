@@ -13,15 +13,15 @@ const CarreraCaballos = () => {
         console.log("🔗 Conectando a WebSockets...");
         socket.on('actualizarCarrera', (nuevaCarrera) => {
             console.log("📡 Datos recibidos desde el backend:", nuevaCarrera);
-            setProgreso(nuevaCarrera);
+            
+            // Reiniciar progreso si la carrera ha finalizado
+            if (Object.values(nuevaCarrera).some(avance => avance >= 20)) {
+                setGanador(Object.keys(nuevaCarrera).find(grupo => nuevaCarrera[grupo] >= 20));
+                setEnMarcha(false);
+                return;
+            }
 
-            // Verificar si algún grupo ha ganado y detener el cronómetro
-            Object.entries(nuevaCarrera).forEach(([grupo, avance]) => {
-                if (avance >= 20) {
-                    setGanador(grupo);
-                    setEnMarcha(false); // ⏹ Detiene el cronómetro cuando hay ganador
-                }
-            });
+            setProgreso(nuevaCarrera);
         });
 
         return () => {
@@ -45,14 +45,20 @@ const CarreraCaballos = () => {
         setTiempo(0);
         setGanador(null);
         setEnMarcha(true);
-        setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 }); // Reinicia la posición de los caballos
+        setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 });
+
+        // 🔄 Enviar evento al backend para reiniciar la carrera
+        socket.emit('reiniciarCarrera');
     };
 
     const reiniciarCarrera = () => {
         setTiempo(0);
         setGanador(null);
         setEnMarcha(false);
-        setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 }); // Reinicia la carrera sin empezar automáticamente
+        setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 });
+
+        // 🔄 Enviar evento al backend para reiniciar la carrera
+        socket.emit('reiniciarCarrera');
     };
 
     return (
@@ -77,7 +83,6 @@ const CarreraCaballos = () => {
                 🐪 Carrera de Camells 🐪
             </h1>
 
-            {/* ⏱ Mostrar el tiempo en la pantalla */}
             <h2 style={{
                 color: 'green',
                 fontSize: '2em',
@@ -86,7 +91,6 @@ const CarreraCaballos = () => {
                 ⏱ Temps: {tiempo} segons
             </h2>
 
-            {/* 🔘 Botón de Start */}
             {!enMarcha && !ganador && (
                 <button 
                     onClick={iniciarCarrera} 
@@ -105,7 +109,6 @@ const CarreraCaballos = () => {
                 </button>
             )}
 
-            {/* 🔄 Botón de Reinicio si hay un ganador */}
             {ganador && (
                 <button 
                     onClick={reiniciarCarrera} 
@@ -172,7 +175,6 @@ const CarreraCaballos = () => {
                                     #A0522D 30px
                                 )`
                             }}>
-                                {/* Imagen del caballo avanzando */}
                                 <img 
                                     src="/caballo.png" 
                                     alt="Caballo" 
