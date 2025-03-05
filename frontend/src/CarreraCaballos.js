@@ -6,8 +6,8 @@ const socket = io('https://nurserace-backend.onrender.com');
 const CarreraCaballos = () => {
     const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
     const [ganador, setGanador] = useState(null);
-    const [tiempo, setTiempo] = useState(0); // ⏱ Estado del cronómetro
-    const [enMarcha, setEnMarcha] = useState(false); // 🚦 Controla si el cronómetro está en marcha
+    const [tiempo, setTiempo] = useState(0);
+    const [enMarcha, setEnMarcha] = useState(false);
 
     useEffect(() => {
         console.log("🔗 Conectando a WebSockets...");
@@ -42,9 +42,17 @@ const CarreraCaballos = () => {
     }, [enMarcha]);
 
     const iniciarCarrera = () => {
-        setTiempo(0); // 🔄 Reinicia el tiempo
-        setGanador(null); // 🔄 Reinicia el ganador
-        setEnMarcha(true); // ▶️ Inicia el cronómetro
+        setTiempo(0);
+        setGanador(null);
+        setEnMarcha(true);
+        setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 }); // Reinicia la posición de los caballos
+    };
+
+    const reiniciarCarrera = () => {
+        setTiempo(0);
+        setGanador(null);
+        setEnMarcha(false);
+        setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 }); // Reinicia la carrera sin empezar automáticamente
     };
 
     return (
@@ -97,6 +105,25 @@ const CarreraCaballos = () => {
                 </button>
             )}
 
+            {/* 🔄 Botón de Reinicio si hay un ganador */}
+            {ganador && (
+                <button 
+                    onClick={reiniciarCarrera} 
+                    style={{
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        backgroundColor: '#ff0000',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        marginBottom: '20px'
+                    }}
+                >
+                    Reiniciar Carrera
+                </button>
+            )}
+
             {ganador ? (
                 <h2 style={{
                     color: 'yellow',
@@ -117,9 +144,9 @@ const CarreraCaballos = () => {
                     {Object.entries(progreso).map(([grupo, avance]) => (
                         <div key={grupo} style={{
                             width: '100%',
-                            marginBottom: '50px', // Aumentamos el espacio entre caballos
+                            marginBottom: '50px',
                             position: 'relative',
-                            height: '120px' // Hacemos más grande la pista de cada caballo
+                            height: '120px'
                         }}>
                             <h2 style={{
                                 color: 'white',
@@ -153,7 +180,7 @@ const CarreraCaballos = () => {
                                         position: 'absolute',
                                         left: `${(avance / 20) * 100}%`,
                                         transition: 'left 0.5s ease-in-out',
-                                        height: '100px' // Ajustamos el tamaño del caballo
+                                        height: '100px'
                                     }}
                                 />
                             </div>
