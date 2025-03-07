@@ -194,6 +194,13 @@ io.on('connection', (socket) => {
     console.log('🟢 Nuevo cliente conectado');
     socket.emit('actualizarCarrera', progresoGrupos);
 
+	socket.on('reiniciarCarrera', () => {
+        console.log("🔄 Reiniciando carrera desde el cliente...");
+        progresoGrupos = { grupo1: 0, grupo2: 0, grupo3: 0 };
+        carreraFinalizada = false;
+        io.emit('actualizarCarrera', progresoGrupos);
+    });
+
     socket.on('disconnect', () => console.log('🔴 Cliente desconectado'));
 });
 
