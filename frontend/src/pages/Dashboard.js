@@ -19,7 +19,7 @@ export default function Dashboard() {
           📙 Grup 3
         </button>
         <button className="button carrera" onClick={() => navigate("/carrera")}>
-          🏇 Carrera de Camells
+          🏇 Cursa de Camells
         </button>
       </div>
 

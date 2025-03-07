@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
 
 const socket = io('https://nurserace-backend.onrender.com');
 
@@ -47,6 +48,18 @@ const CarreraCaballos = () => {
         setEnMarcha(true); // ▶️ Inicia el cronómetro
     };
 
+    const reiniciarCarrera = () => {
+        axios.post('https://nurserace-backend.onrender.com/reiniciar')
+            .then(response => {
+                console.log(response.data.mensaje);
+                setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 });
+                setTiempo(0);
+                setGanador(null);
+                setEnMarcha(false);
+            })
+            .catch(error => console.error("Error al reiniciar:", error));
+    };
+
     return (
         <div style={{
             textAlign: 'center',
@@ -66,7 +79,7 @@ const CarreraCaballos = () => {
                 textShadow: '2px 2px 4px black',
                 marginBottom: '20px'
             }}>
-                🐪 Carrera de Camells 🐪
+                🐪 Cursa de Camells 🐪
             </h1>
 
             {/* ⏱ Mostrar el tiempo en la pantalla */}
@@ -98,14 +111,33 @@ const CarreraCaballos = () => {
             )}
 
             {ganador ? (
-                <h2 style={{
-                    color: 'yellow',
-                    fontSize: '3em',
-                    textShadow: '2px 2px 4px black',
-                    marginBottom: '20px'
-                }}>
-                    🎉 ¡{ganador} ha guanyat en {tiempo} segons! 🎉
-                </h2>
+                <>
+                    <h2 style={{
+                        color: 'yellow',
+                        fontSize: '3em',
+                        textShadow: '2px 2px 4px black',
+                        marginBottom: '20px'
+                    }}>
+                        🎉 ¡{ganador} ha guanyat en {tiempo} segons! 🎉
+                    </h2>
+
+                    {/* 🔄 Botón de reinicio */}
+                    <button 
+                        onClick={reiniciarCarrera}
+                        style={{
+                            padding: '10px 20px',
+                            fontSize: '16px',
+                            backgroundColor: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            marginTop: '20px'
+                        }}
+                    >
+                        🔄 Reiniciar Carrera
+                    </button>
+                </>
             ) : (
                 <div style={{
                     maxWidth: '900px',
@@ -117,9 +149,9 @@ const CarreraCaballos = () => {
                     {Object.entries(progreso).map(([grupo, avance]) => (
                         <div key={grupo} style={{
                             width: '100%',
-                            marginBottom: '50px', // Aumentamos el espacio entre caballos
+                            marginBottom: '50px', // Aumentamos el espacio entre camellos
                             position: 'relative',
-                            height: '120px' // Hacemos más grande la pista de cada caballo
+                            height: '120px' // Hacemos más grande la pista de cada camello
                         }}>
                             <h2 style={{
                                 color: 'white',
@@ -145,7 +177,7 @@ const CarreraCaballos = () => {
                                     #A0522D 30px
                                 )`
                             }}>
-                                {/* Imagen del caballo avanzando */}
+                                {/* Imagen del camello avanzando */}
                                 <img 
                                     src="/caballo.png" 
                                     alt="Caballo" 
@@ -153,7 +185,7 @@ const CarreraCaballos = () => {
                                         position: 'absolute',
                                         left: `${(avance / 20) * 100}%`,
                                         transition: 'left 0.5s ease-in-out',
-                                        height: '100px' // Ajustamos el tamaño del caballo
+                                        height: '100px' // Ajustamos el tamaño del camello
                                     }}
                                 />
                             </div>
@@ -166,3 +198,4 @@ const CarreraCaballos = () => {
 };
 
 export default CarreraCaballos;
+
