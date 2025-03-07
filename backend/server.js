@@ -85,7 +85,7 @@ const preguntas = [
     { 
         pregunta: "Quines dues vacunes no es poden posar juntes?", 
         opciones: ["Varicel·la i triple vírica", "Varicel·la i febre groga", "Triple vírica i febre groga", "Totes es poden administrar conjuntament"], 
-        correcta: 2 
+        correcta: 1 
     },
  { 
         pregunta: "Nen de 19 anys que acut a consulta per seguir calendari accelerat de vacunacions. No ha passat la varicel·la. Segons nota infermera avui cal administrar VVZ i TV. Revisant calendari, fa 15 dies li van administrar VPH9 + TV i també té pendent administrar meningitis i HA. Quines vacunes cal administrar?", 
