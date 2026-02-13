@@ -1,6 +1,5 @@
 [
   {
-    "id": "96f375cc-c560-49b7-bd25-a3a838761b01",
     "pregunta": "Qui va descobrir les vacunes?",
     "opciones": [
       "Edward Jenner",
@@ -11,7 +10,6 @@
     "correcta": 0
   },
   {
-    "id": "544b2fa6-cdd7-4890-9422-0dcbda59be28",
     "pregunta": "A quina edat s’administra la vacuna TV?",
     "opciones": [
       "12 mesos – 3 anys",
@@ -22,7 +20,6 @@
     "correcta": 0
   },
   {
-    "id": "da1a677f-bcb3-4af2-a352-9273d4c5ecb6",
     "pregunta": "A quina temperatura s’han de mantenir les vacunes a la nevera?",
     "opciones": [
       "entre 3ºC – 8ºC",
@@ -33,7 +30,6 @@
     "correcta": 2
   },
   {
-    "id": "295c9c79-5b29-4332-b06c-f1a9076fe925",
     "pregunta": "Quants tipus de vacuna hi ha?",
     "opciones": [
       "vacunes de microorganismes sencers, de subunitats, d’ADN",
@@ -44,7 +40,6 @@
     "correcta": 1
   },
   {
-    "id": "d1287bcf-5812-47b3-aa18-a596570bee3a",
     "pregunta": "Acudeix a la consulta un pacient de 90 anys per vacunar-se de la grip. Actualment, només tenim al centre la vacuna de la grip adjuvada. Veient el seu historial vacunal, fa una setmana que la infermera d’ATDOM li ha administrat la primera dosi de vacuna HZ. Què hem de fer?",
     "opciones": [
       "Reprogramem visita a les 3 setmanes per administrar-la conjuntament amb HZ",
@@ -55,7 +50,6 @@
     "correcta": 1
   },
   {
-    "id": "2ed503b1-73f3-4d5f-83f3-8c0ef3442661",
     "pregunta": "Quan s’inicia la campanya de vacunació gripal?",
     "opciones": [
       "Setembre",
@@ -66,7 +60,6 @@
     "correcta": 2
   },
   {
-    "id": "eeb2fd42-31d4-4ffe-9af7-b178258c6dc2",
     "pregunta": "Pacient de 18 anys a qui van administrar la 1a dosi de vacuna de la varicel·la el 19/10/2024 i el 14/11/2024, per error, li van administrar una dosi de la vacuna Shingrix. Davant d’aquest error, quina pauta s’ha de seguir?",
     "opciones": [
       "Iniciar una nova pauta de varicel·la, ja que no es comptabilitza com administrada",
@@ -77,7 +70,6 @@
     "correcta": 1
   },
   {
-    "id": "0ff6a411-0b92-4760-a5e6-fc27a2569be0",
     "pregunta": "Assenyala la resposta incorrecta respecte al virus de l’hepatitis B (VHB)",
     "opciones": [
       "El VHB pot sobreviure fora de l'organisme almenys 7 dies i pot causar infecció si penetra en un altre organisme en aquest període",
@@ -88,7 +80,6 @@
     "correcta": 2
   },
   {
-    "id": "09c89b0a-fe1e-4efb-ba1a-18d1b32be578",
     "pregunta": "Quina és la via d’administració més utilitzada per administrar les vacunes?",
     "opciones": [
       "SC",
@@ -99,7 +90,6 @@
     "correcta": 3
   },
   {
-    "id": "5930379d-ca33-4476-bdbc-aef858eaf9aa",
     "pregunta": "A quin any es va instaurar el primer calendari sistemàtic a Espanya?",
     "opciones": [
       "1981",
@@ -110,7 +100,6 @@
     "correcta": 2
   },
   {
-    "id": "554882c3-4229-48bc-ae6d-0c54ed33e072",
     "pregunta": "En una escola bressol han detectat un cas de xarampió. Acudeix a la consulta un nen de 9 mesos per ser vacunat segons indicació de Salut Pública. Què fem?",
     "opciones": [
       "No podem administrar-la, perquè seguint calendari la vacuna de la TV s’administra als 12 mesos",
@@ -121,7 +110,6 @@
     "correcta": 1
   },
   {
-    "id": "13a61cbe-774d-4926-927f-28dcabf4a5d1",
     "pregunta": "Quan es va iniciar la vacunació de la COVID a Espanya?",
     "opciones": [
       "Febrer 2021",
@@ -132,7 +120,6 @@
     "correcta": 3
   },
   {
-    "id": "5dfd7ce5-aaca-44e9-8fd4-4488139bb74b",
     "pregunta": "Acudeix un adolescent de 17 anys, sense factors de risc, per administrar la vacuna VPH9.",
     "opciones": [
       "Li administrem 1 dosi, la té finançada",
@@ -143,7 +130,6 @@
     "correcta": 0
   },
   {
-    "id": "7c195cb3-3e55-4e3f-9ae8-3495b09be285",
     "pregunta": "La sèrie d’elements i activitats necessàries per garantir la potència immunitzadora de les vacunes des de la seva fabricació fins a l’administració d’aquestes a la població es defineix com:",
     "opciones": [
       "Cadena del fred",
@@ -154,7 +140,6 @@
     "correcta": 0
   },
   {
-    "id": "f4e638e0-f659-4fb6-ae92-8b7ee9cc59f1",
     "pregunta": "Quines dues vacunes no es poden posar juntes?",
     "opciones": [
       "Varicel·la i triple vírica",
@@ -165,7 +150,6 @@
     "correcta": 2
   },
   {
-    "id": "c41c96b4-67a2-4d8b-a10e-7145a523d12c",
     "pregunta": "Un jove de 19 anys acudeix a consulta per seguir un calendari accelerat de vacunacions. No ha passat la varicel·la. Segons nota d’infermeria, avui cal administrar VVZ i TV. Revisant el calendari, fa 15 dies li van administrar VPH9 + TV i també té pendent administrar meningitis i HA. Quines vacunes cal administrar?",
     "opciones": [
       "Administrem TV + VVZ, segons nota d’infermeria",
@@ -176,7 +160,6 @@
     "correcta": 2
   },
   {
-    "id": "57f26400-154a-4c58-8f5f-28a16914d204",
     "pregunta": "Acudeix un pacient de 36 anys per a la realització de PAPPS. En preguntar sobre riscos d’ITS, comenta que manté relacions amb homes. Expliquem la vacunació del papil·loma i accepta l’administració de la vacuna.",
     "opciones": [
       "Administrem una dosi, ja que la té finançada",
@@ -187,7 +170,6 @@
     "correcta": 2
   },
   {
-    "id": "04e3dc24-2b0b-44ab-a380-f44a4c4e69ce",
     "pregunta": "Acudeix a la consulta un adolescent de 16 anys perquè a la seva escola hi ha un brot de tos ferina. Revisem el calendari a la història clínica i veiem que li falta la Td dels 14 anys. La seva mare ens diu que fa un any que va patir la tos ferina. Què fem?",
     "opciones": [
       "Vacunem 1 dosi de Td, per seguir el calendari.",
@@ -198,7 +180,6 @@
     "correcta": 2
   },
   {
-    "id": "92b63470-630a-4c37-a2cb-3a919a686e95",
     "pregunta": "Respecte la vacuna antipneumocòccica, és cert que?",
     "opciones": [
       "Interval entre Pn23 i Pn20 és de 6 m",
@@ -209,7 +190,6 @@
     "correcta": 3
   },
   {
-    "id": "ef00153a-6ecc-4cc9-8b6c-34ac9cdc8687",
     "pregunta": "Acudeix a la consulta una mare de 50 anys explicant que a l’escola del seu fill hi ha un brot de xarampió. Què fem?",
     "opciones": [
       "Administrem 1 dosi de TV i citem al mes per administrar la 2a dosi.",

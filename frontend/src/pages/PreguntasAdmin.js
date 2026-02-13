@@ -40,7 +40,7 @@ export default function PreguntasAdmin() {
       const response = await axios.get(`${API_URL}/preguntas`);
       setPreguntas(response.data || []);
     } catch (err) {
-      setError(err.response?.data?.error || 'No se pudieron cargar las preguntas.');
+      setError(err.response?.data?.error || "No s'han pogut carregar les preguntes.");
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ export default function PreguntasAdmin() {
   function startEdit(pregunta) {
     setEditingId(pregunta.id);
     setForm(normalizeForm(pregunta));
-    setFeedback('Editando pregunta seleccionada.');
+    setFeedback('Editant la pregunta seleccionada.');
   }
 
   function resetEditor() {
@@ -82,14 +82,14 @@ export default function PreguntasAdmin() {
       }
       resetEditor();
     } catch (err) {
-      setError(err.response?.data?.error || 'No se pudo guardar la pregunta.');
+      setError(err.response?.data?.error || "No s'ha pogut desar la pregunta.");
     }
   }
 
   async function handleDelete(id) {
     setError('');
     setFeedback('');
-    if (!window.confirm('Quieres eliminar esta pregunta?')) {
+    if (!window.confirm('Vols eliminar aquesta pregunta?')) {
       return;
     }
 
@@ -101,7 +101,7 @@ export default function PreguntasAdmin() {
       }
       setFeedback('Pregunta eliminada.');
     } catch (err) {
-      setError(err.response?.data?.error || 'No se pudo eliminar la pregunta.');
+      setError(err.response?.data?.error || "No s'ha pogut eliminar la pregunta.");
     }
   }
 
@@ -111,10 +111,10 @@ export default function PreguntasAdmin() {
         <header className="admin-header">
           <div>
             <p className="admin-kicker">Editor de contingut</p>
-            <h1>Gestio de preguntes</h1>
+            <h1>Gestió de preguntes</h1>
           </div>
           <div className="admin-actions">
-            <button className="ghost" onClick={() => navigate('/dashboard')}>Tornar al dashboard</button>
+            <button className="ghost" onClick={() => navigate('/dashboard')}>Tornar al tauler</button>
             <button
               className="ghost"
               onClick={() => {
@@ -146,7 +146,7 @@ export default function PreguntasAdmin() {
 
             {form.opciones.map((opcion, index) => (
               <label key={`op-${index}`}>
-                Opcio {index + 1}
+                Opció {index + 1}
                 <input
                   type="text"
                   value={opcion}
@@ -171,7 +171,7 @@ export default function PreguntasAdmin() {
             </label>
 
             <button type="submit" className="primary">
-              {editingId ? 'Guardar canvis' : 'Afegir pregunta'}
+              {editingId ? 'Desar canvis' : 'Afegeix pregunta'}
             </button>
           </form>
 
@@ -188,8 +188,8 @@ export default function PreguntasAdmin() {
                     {pregunta.pregunta}
                   </p>
                   <div>
-                    <button className="ghost" onClick={() => startEdit(pregunta)}>Editar</button>
-                    <button className="danger" onClick={() => handleDelete(pregunta.id)}>Eliminar</button>
+                    <button className="ghost" onClick={() => startEdit(pregunta)}>Edita</button>
+                    <button className="danger" onClick={() => handleDelete(pregunta.id)}>Elimina</button>
                   </div>
                 </li>
               ))}

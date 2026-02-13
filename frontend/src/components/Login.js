@@ -15,7 +15,7 @@ export default function Login() {
       localStorage.setItem("authenticated", "true");
       navigate("/dashboard");
     } else {
-      setError("Usuario o contraseña incorrectos");
+      setError("Usuari o contrasenya incorrectes");
     }
   };
 
@@ -23,8 +23,8 @@ export default function Login() {
     <div className="login-container">
       <div className="login-box">
         <p className="login-kicker">Nurse Race</p>
-        <h2 className="login-title">Iniciar sessio</h2>
-        <p className="login-subtitle">Acces intern per gestionar i jugar el quiz.</p>
+        <h2 className="login-title">Iniciar sessió</h2>
+        <p className="login-subtitle">Accés intern per gestionar i jugar al qüestionari.</p>
 
         {error && <p className="error-message">{error}</p>}
 

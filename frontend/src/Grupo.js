@@ -27,7 +27,7 @@ const Grupo = ({ grupo }) => {
         const response = await axios.get(`${API_URL}/preguntas`);
         setPreguntas(response.data || []);
       } catch (_err) {
-        setError('No se pudieron cargar las preguntas.');
+        setError("No s'han pogut carregar les preguntes.");
       } finally {
         setLoading(false);
       }
@@ -50,7 +50,7 @@ const Grupo = ({ grupo }) => {
 
       if (response.data?.mensaje) {
         setCarreraFinalizada(true);
-        setMensaje('La carrera ha finalizado. Reinicia para volver a jugar.');
+        setMensaje('La cursa ha finalitzat. Reinicia per tornar a jugar.');
         return;
       }
 
@@ -58,17 +58,17 @@ const Grupo = ({ grupo }) => {
         const siguienteIndice = indiceActual + 1;
         if (siguienteIndice >= preguntas.length) {
           setCarreraFinalizada(true);
-          setMensaje('Has completado el cuestionario de este grupo.');
+          setMensaje("Has completat el qüestionari d'aquest grup.");
         } else {
           setIndiceActual(siguienteIndice);
           setMensaje('Resposta correcta.');
         }
       } else {
         setIndiceActual(0);
-        setMensaje('Respuesta incorrecta. Vuelves al inicio.');
+        setMensaje("Resposta incorrecta. Tornes a l'inici.");
       }
     } catch (err) {
-      setMensaje(err.response?.data?.error || 'Error al enviar la respuesta.');
+      setMensaje(err.response?.data?.error || "Error en enviar la resposta.");
     }
   };
 
@@ -76,10 +76,10 @@ const Grupo = ({ grupo }) => {
     try {
       await axios.post(`${API_URL}/reiniciar`);
       setIndiceActual(0);
-      setMensaje('Carrera reiniciada.');
+      setMensaje('Cursa reiniciada.');
       setCarreraFinalizada(false);
     } catch (_err) {
-      setMensaje('Error al reiniciar la carrera.');
+      setMensaje("Error en reiniciar la cursa.");
     }
   };
 
@@ -110,9 +110,9 @@ const Grupo = ({ grupo }) => {
 
         {!loading && !error && (!preguntaActual || carreraFinalizada) ? (
           <div className="quiz-finished">
-            <h2>Sessio finalitzada</h2>
-            <p>Pots reiniciar la carrera o tornar al dashboard.</p>
-            <button onClick={reiniciarCarrera}>Reiniciar carrera</button>
+            <h2>Sessió finalitzada</h2>
+            <p>Pots reiniciar la cursa o tornar al tauler.</p>
+            <button onClick={reiniciarCarrera}>Reiniciar cursa</button>
           </div>
         ) : null}
 

@@ -8,7 +8,7 @@ export default function Dashboard() {
     <main className="dashboard-shell">
       <section className="dashboard-panel">
         <p className="dashboard-kicker">Nurse Race</p>
-        <h1 className="dashboard-title">Plataforma de gamificacio</h1>
+        <h1 className="dashboard-title">Plataforma de gamificació</h1>
 
         <div className="dashboard-grid">
           <button className="dashboard-card dashboard-card-g1" onClick={() => navigate("/grupo1")}>
@@ -25,10 +25,10 @@ export default function Dashboard() {
           </button>
           <button className="dashboard-card dashboard-card-race" onClick={() => navigate("/carrera")}>
             <span>Cursa de Camells</span>
-            <small>Visualitzacio en temps real</small>
+            <small>Visualització en temps real</small>
           </button>
           <button className="dashboard-card dashboard-card-admin" onClick={() => navigate("/preguntas")}>
-            <span>Gestio de preguntes</span>
+            <span>Gestió de preguntes</span>
             <small>Crear, editar i esborrar</small>
           </button>
         </div>
@@ -40,7 +40,7 @@ export default function Dashboard() {
             navigate("/");
           }}
         >
-          Tancar sessio
+          Tancar sessió
         </button>
       </section>
       <div className="dashboard-glow" aria-hidden="true">
