@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -33,30 +33,39 @@ function useSfx() {
   const ctxRef = useRef(null);
   const masterGainRef = useRef(null);
   const [enabled, setEnabled] = useState(true);
+  const enabledRef = useRef(true);
 
-  const ensure = async () => {
+  const ensure = useCallback(async () => {
     if (!ctxRef.current) {
       const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextCtor) return false;
       ctxRef.current = new AudioContextCtor();
       const master = ctxRef.current.createGain();
-      master.gain.value = enabled ? 0.6 : 0.0;
+      master.gain.value = enabledRef.current ? 0.6 : 0.0;
       master.connect(ctxRef.current.destination);
       masterGainRef.current = master;
     }
     if (ctxRef.current.state === 'suspended') {
-      await ctxRef.current.resume();
+      try {
+        await ctxRef.current.resume();
+      } catch (_err) {
+        return false;
+      }
     }
-  };
+    return true;
+  }, []);
 
   useEffect(() => {
+    enabledRef.current = enabled;
     if (masterGainRef.current) {
       masterGainRef.current.gain.value = enabled ? 0.6 : 0.0;
     }
   }, [enabled]);
 
-  const playBeep = async (freq, ms, type = 'sine') => {
-    if (!enabled) return;
-    await ensure();
+  const playBeep = useCallback(async (freq, ms, type = 'sine') => {
+    if (!enabledRef.current) return;
+    const ready = await ensure();
+    if (!ready || !ctxRef.current || !masterGainRef.current) return;
     const ctx = ctxRef.current;
     const o = ctx.createOscillator();
     const g = ctx.createGain();
@@ -71,11 +80,12 @@ function useSfx() {
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + ms / 1000);
     o.start(t0);
     o.stop(t0 + ms / 1000 + 0.02);
-  };
+  }, [ensure]);
 
-  const playWhoosh = async () => {
-    if (!enabled) return;
-    await ensure();
+  const playWhoosh = useCallback(async () => {
+    if (!enabledRef.current) return;
+    const ready = await ensure();
+    if (!ready || !ctxRef.current || !masterGainRef.current) return;
     const ctx = ctxRef.current;
     const o = ctx.createOscillator();
     const g = ctx.createGain();
@@ -91,11 +101,12 @@ function useSfx() {
     g.connect(masterGainRef.current);
     o.start(t0);
     o.stop(t0 + 0.33);
-  };
+  }, [ensure]);
 
-  const playCheer = async () => {
-    if (!enabled) return;
-    await ensure();
+  const playCheer = useCallback(async () => {
+    if (!enabledRef.current) return;
+    const ready = await ensure();
+    if (!ready || !ctxRef.current || !masterGainRef.current) return;
     const ctx = ctxRef.current;
     const o = ctx.createOscillator();
     const g = ctx.createGain();
@@ -111,16 +122,16 @@ function useSfx() {
     g.connect(masterGainRef.current);
     o.start(t0);
     o.stop(t0 + 0.75);
-  };
+  }, [ensure]);
 
-  return {
+  return useMemo(() => ({
     enabled,
     setEnabled,
     unlock: ensure,
     playBeep,
     playWhoosh,
     playCheer,
-  };
+  }), [enabled, ensure, playBeep, playWhoosh, playCheer]);
 }
 
 const CarreraCaballos = () => {
@@ -196,23 +207,27 @@ const CarreraCaballos = () => {
   useEffect(() => {
     if (phase !== 'countdown') return;
     let cancelled = false;
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const fireAndForget = (promise) => {
+      Promise.resolve(promise).catch(() => {});
+    };
 
     const run = async () => {
       setCountdown(3);
-      await sfx.unlock();
-      await sfx.playBeep(640, 90, 'square');
-      await new Promise((r) => setTimeout(r, 450));
+      fireAndForget(sfx.unlock());
+      fireAndForget(sfx.playBeep(640, 90, 'square'));
+      await wait(450);
       if (cancelled) return;
       setCountdown(2);
-      await sfx.playBeep(720, 90, 'square');
-      await new Promise((r) => setTimeout(r, 450));
+      fireAndForget(sfx.playBeep(720, 90, 'square'));
+      await wait(450);
       if (cancelled) return;
       setCountdown(1);
-      await sfx.playBeep(820, 90, 'square');
-      await new Promise((r) => setTimeout(r, 450));
+      fireAndForget(sfx.playBeep(820, 90, 'square'));
+      await wait(450);
       if (cancelled) return;
       setCountdown(0);
-      await sfx.playBeep(980, 140, 'sine');
+      fireAndForget(sfx.playBeep(980, 140, 'sine'));
       setPhase('running');
       setEnMarcha(true);
     };
