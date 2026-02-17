@@ -1,0 +1,13 @@
+.DS_Store
+.netlify
+
+# Dependencies
+backend/node_modules
+frontend/node_modules
+
+# Build outputs
+frontend/build
+backend/coverage
+
+# Logs
+*.log

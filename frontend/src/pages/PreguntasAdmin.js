@@ -74,7 +74,7 @@ export default function PreguntasAdmin() {
       if (editingId) {
         const response = await axios.put(`${API_URL}/preguntas/${editingId}`, form);
         setPreguntas((prev) => prev.map((pregunta) => (pregunta.id === editingId ? response.data : pregunta)));
-        setFeedback('Pregunta actualizada.');
+        setFeedback('Pregunta actualitzada.');
       } else {
         const response = await axios.post(`${API_URL}/preguntas`, form);
         setPreguntas((prev) => [...prev, response.data]);
@@ -164,7 +164,7 @@ export default function PreguntasAdmin() {
               >
                 {form.opciones.map((_opcion, index) => (
                   <option value={index} key={`correcta-${index}`}>
-                    Opcio {index + 1}
+                    Opció {index + 1}
                   </option>
                 ))}
               </select>

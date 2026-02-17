@@ -265,5 +265,5 @@ io.on('connection', (socket) => {
 
 server.listen(4000, () => {
   // eslint-disable-next-line no-console
-  console.log('Servidor funcionando en el puerto 4000');
+  console.log('Servidor funcionant al port 4000');
 });

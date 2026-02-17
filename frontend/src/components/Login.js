@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
-import "./login.css"; // Importamos el CSS
+import "./login.css";
 
 export default function Login() {
   const [username, setUsername] = useState("");

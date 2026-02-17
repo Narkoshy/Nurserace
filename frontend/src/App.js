@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Dashboard from "./pages/Dashboard"; // Si está en /pages
-import Grupo from "./Grupo"; // Si está en /src/
-import CarreraCaballos from "./CarreraCaballos"; // Si está en /src/
+import Dashboard from "./pages/Dashboard";
+import Grupo from "./Grupo";
+import CarreraCaballos from "./CarreraCaballos";
 import PreguntasAdmin from "./pages/PreguntasAdmin";
 
 function App() {

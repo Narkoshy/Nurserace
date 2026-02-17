@@ -1,0 +1,11 @@
+{
+  "name": "proyecto-gamificacion-vacunes",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "test": "npm --prefix frontend test -- --watchAll=false && npm --prefix backend test",
+    "start:frontend": "npm --prefix frontend start",
+    "start:backend": "npm --prefix backend start",
+    "check": "npm run test && npm run build"
+  }
+}
