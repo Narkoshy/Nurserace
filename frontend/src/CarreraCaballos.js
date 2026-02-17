@@ -123,27 +123,6 @@ function useSfx() {
   };
 }
 
-function Camel({ tint = '#f59e0b', running }) {
-  return (
-    <svg className={`camel ${running ? 'is-running' : ''}`} viewBox="0 0 160 100" role="img" aria-label="camell">
-      <g fill={tint}>
-        <path d="M20 70c2-12 10-20 24-20 8 0 12 2 18 6 6-10 14-16 26-16 10 0 18 4 24 12 5-2 10-3 16-3 15 0 25 9 25 22 0 10-6 18-15 21-6 2-12 2-19 2H50c-8 0-14-1-20-4-8-4-12-12-10-20z" opacity="0.96" />
-        <path d="M62 36c5-10 12-15 21-15 10 0 18 6 22 18-9-4-16-5-23-2-7 3-12 8-15 14-2-6-4-11-5-15z" opacity="0.9" />
-        <path d="M112 40c8-8 15-10 22-7 5 2 8 6 9 12-7-4-13-4-19-1-6 3-10 7-12 13-1-6-1-11 0-17z" opacity="0.85" />
-      </g>
-      <g className="camel-legs" stroke="#111827" strokeWidth="6" strokeLinecap="round">
-        <path d="M55 78v16" />
-        <path d="M72 78v16" />
-        <path d="M104 78v16" />
-        <path d="M121 78v16" />
-      </g>
-      <g>
-        <circle cx="42" cy="64" r="5" fill="#0b1220" opacity="0.7" />
-      </g>
-    </svg>
-  );
-}
-
 const CarreraCaballos = () => {
   const navigate = useNavigate();
   const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
@@ -349,7 +328,6 @@ const CarreraCaballos = () => {
               const percent = Math.min(100, (avance / puntosNecesarios) * 100);
               const label = grupo === 'grupo1' ? 'Grup 1' : grupo === 'grupo2' ? 'Grup 2' : 'Grup 3';
               const isLeader = leader === grupo && phase !== 'finished';
-              const tint = grupo === 'grupo1' ? '#06b6d4' : grupo === 'grupo2' ? '#22c55e' : '#f59e0b';
               const laneBurst = burst[grupo] || 0;
 
               return (
@@ -369,7 +347,11 @@ const CarreraCaballos = () => {
                     <div className="tv-finish" aria-hidden="true" />
 
                     <div className="tv-camel" style={{ left: `${percent}%` }}>
-                      <Camel tint={tint} running={phase === 'running'} />
+                      <img
+                        className={`tv-camel-image ${phase === 'running' ? 'is-running' : ''}`}
+                        src="/caballo.png"
+                        alt="Camell"
+                      />
                       <span key={laneBurst} className={`tv-dust ${phase === 'running' ? 'go' : ''}`} aria-hidden="true" />
                     </div>
                   </div>
