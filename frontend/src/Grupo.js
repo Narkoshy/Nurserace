@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { API_URL } from './config';
 import './Grupo.css';
 
@@ -10,6 +11,7 @@ const grupoLabel = {
 };
 
 const Grupo = ({ grupo }) => {
+  const navigate = useNavigate();
   const [preguntas, setPreguntas] = useState([]);
   const [indiceActual, setIndiceActual] = useState(0);
   const [mensaje, setMensaje] = useState('');
@@ -86,8 +88,15 @@ const Grupo = ({ grupo }) => {
   return (
     <main className="quiz-shell">
       <section className="quiz-card">
-        <p className="quiz-kicker">{grupoLabel[grupo] || 'Grup'}</p>
-        <h1>Qüestionari</h1>
+        <header className="quiz-header">
+          <div>
+            <p className="quiz-kicker">{grupoLabel[grupo] || 'Grup'}</p>
+            <h1>Qüestionari</h1>
+          </div>
+          <button className="quiz-home-btn" onClick={() => navigate('/dashboard')}>
+            Tornar a l'inici
+          </button>
+        </header>
 
         {loading ? <p className="quiz-note">Carregant preguntes...</p> : null}
         {error ? <p className="quiz-note quiz-error">{error}</p> : null}
@@ -111,8 +120,11 @@ const Grupo = ({ grupo }) => {
         {!loading && !error && (!preguntaActual || carreraFinalizada) ? (
           <div className="quiz-finished">
             <h2>Sessió finalitzada</h2>
-            <p>Pots reiniciar la cursa o tornar al tauler.</p>
-            <button onClick={reiniciarCarrera}>Reiniciar cursa</button>
+            <p>Pots reiniciar la cursa o tornar a l'inici.</p>
+            <div className="quiz-finished-actions">
+              <button onClick={reiniciarCarrera}>Reiniciar cursa</button>
+              <button onClick={() => navigate('/dashboard')}>Tornar a l'inici</button>
+            </div>
           </div>
         ) : null}
 

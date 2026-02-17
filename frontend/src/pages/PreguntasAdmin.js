@@ -114,7 +114,7 @@ export default function PreguntasAdmin() {
             <h1>Gestió de preguntes</h1>
           </div>
           <div className="admin-actions">
-            <button className="ghost" onClick={() => navigate('/dashboard')}>Tornar al tauler</button>
+            <button className="ghost" onClick={() => navigate('/dashboard')}>Tornar a l'inici</button>
             <button
               className="ghost"
               onClick={() => {

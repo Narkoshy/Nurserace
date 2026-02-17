@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { API_URL } from './config';
 import './CarreraCaballos.css';
 
@@ -144,6 +145,7 @@ function Camel({ tint = '#f59e0b', running }) {
 }
 
 const CarreraCaballos = () => {
+  const navigate = useNavigate();
   const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
   const [ganador, setGanador] = useState(null);
   const [tiempo, setTiempo] = useState(0);
@@ -289,6 +291,7 @@ const CarreraCaballos = () => {
             <span>Objectiu: {puntosNecesarios} encerts</span>
           </div>
           <div className="tv-controls">
+            <button className="tv-chip" onClick={() => navigate('/dashboard')}>Tornar a l'inici</button>
             <button className="tv-chip" onClick={() => setReducedMotion((v) => !v)}>
               {reducedMotion ? 'Moviment: desactivat' : 'Moviment: activat'}
             </button>
