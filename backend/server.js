@@ -53,9 +53,18 @@ function getPreguntaInicial() {
   return preguntas.length > 0 ? 1 : null;
 }
 
+function getEnunciatByNumero(numeroPregunta) {
+  if (!Number.isInteger(numeroPregunta) || numeroPregunta < 1 || numeroPregunta > preguntas.length) {
+    return null;
+  }
+  return preguntas[numeroPregunta - 1]?.pregunta || null;
+}
+
 function createDetallGrup() {
+  const preguntaInicial = getPreguntaInicial();
   return {
-    preguntaActual: getPreguntaInicial(),
+    preguntaActual: preguntaInicial,
+    enunciatActual: getEnunciatByNumero(preguntaInicial),
     ultimaResposta: null,
     feedbackToken: 0,
   };
@@ -79,12 +88,16 @@ function sincronizarDetallGrups() {
 
     if (preguntaInicial === null) {
       detallGrups[grup].preguntaActual = null;
+      detallGrups[grup].enunciatActual = null;
       continue;
     }
 
     const actual = Number(detallGrups[grup].preguntaActual);
     if (!Number.isInteger(actual) || actual < 1 || actual > preguntas.length) {
       detallGrups[grup].preguntaActual = preguntaInicial;
+      detallGrups[grup].enunciatActual = getEnunciatByNumero(preguntaInicial);
+    } else {
+      detallGrups[grup].enunciatActual = getEnunciatByNumero(actual);
     }
   }
 }
@@ -284,6 +297,7 @@ app.post('/responder', (req, res) => {
     detallGrups[grupo] = {
       ...detallGrups[grupo],
       preguntaActual: siguientePregunta,
+      enunciatActual: getEnunciatByNumero(siguientePregunta),
       ultimaResposta: 'correcte',
       feedbackToken: (detallGrups[grupo]?.feedbackToken || 0) + 1,
     };
@@ -297,6 +311,7 @@ app.post('/responder', (req, res) => {
     detallGrups[grupo] = {
       ...detallGrups[grupo],
       preguntaActual: getPreguntaInicial(),
+      enunciatActual: getEnunciatByNumero(getPreguntaInicial()),
       ultimaResposta: 'incorrecte',
       feedbackToken: (detallGrups[grupo]?.feedbackToken || 0) + 1,
     };

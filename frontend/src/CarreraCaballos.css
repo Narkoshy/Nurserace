@@ -274,6 +274,19 @@
   font-weight: 700;
 }
 
+.tv-question-text {
+  margin: 0.32rem 0 0;
+  max-width: 760px;
+  color: #dbeafe;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.tv-progress-counter {
+  margin: 0.2rem 0 0;
+}
+
 .tv-lane-head .rhs {
   display: flex;
   align-items: center;

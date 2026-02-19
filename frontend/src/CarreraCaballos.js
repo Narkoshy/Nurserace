@@ -13,21 +13,29 @@ function getPreguntaActualFromProgres(progres, punts) {
   return Math.min(progres + 1, punts);
 }
 
-function getDetallInicial(progreso = { grupo1: 0, grupo2: 0, grupo3: 0 }, punts = 20) {
+function getEnunciatByNumero(numeroPregunta, llistaPreguntes = []) {
+  if (!Number.isInteger(numeroPregunta) || numeroPregunta < 1 || numeroPregunta > llistaPreguntes.length) return null;
+  return llistaPreguntes[numeroPregunta - 1]?.pregunta || null;
+}
+
+function getDetallInicial(progreso = { grupo1: 0, grupo2: 0, grupo3: 0 }, punts = 20, llistaPreguntes = []) {
+  const pregunta1 = getPreguntaActualFromProgres(progreso.grupo1 || 0, punts);
+  const pregunta2 = getPreguntaActualFromProgres(progreso.grupo2 || 0, punts);
+  const pregunta3 = getPreguntaActualFromProgres(progreso.grupo3 || 0, punts);
   return {
-    grupo1: { preguntaActual: getPreguntaActualFromProgres(progreso.grupo1 || 0, punts), ultimaResposta: null, feedbackToken: 0 },
-    grupo2: { preguntaActual: getPreguntaActualFromProgres(progreso.grupo2 || 0, punts), ultimaResposta: null, feedbackToken: 0 },
-    grupo3: { preguntaActual: getPreguntaActualFromProgres(progreso.grupo3 || 0, punts), ultimaResposta: null, feedbackToken: 0 },
+    grupo1: { preguntaActual: pregunta1, enunciatActual: getEnunciatByNumero(pregunta1, llistaPreguntes), ultimaResposta: null, feedbackToken: 0 },
+    grupo2: { preguntaActual: pregunta2, enunciatActual: getEnunciatByNumero(pregunta2, llistaPreguntes), ultimaResposta: null, feedbackToken: 0 },
+    grupo3: { preguntaActual: pregunta3, enunciatActual: getEnunciatByNumero(pregunta3, llistaPreguntes), ultimaResposta: null, feedbackToken: 0 },
   };
 }
 
-function normalizeEstado(payload) {
+function normalizeEstado(payload, llistaPreguntes = []) {
   if (payload && payload.progreso) {
     const punts = payload.puntosNecesarios || 20;
     const teDetallServidor = Boolean(payload.detallGrups && typeof payload.detallGrups === 'object');
     return {
       progreso: payload.progreso,
-      detallGrups: teDetallServidor ? payload.detallGrups : getDetallInicial(payload.progreso, punts),
+      detallGrups: teDetallServidor ? payload.detallGrups : getDetallInicial(payload.progreso, punts, llistaPreguntes),
       teDetallServidor,
       puntosNecesarios: punts,
       carreraFinalizada: Boolean(payload.carreraFinalizada),
@@ -37,7 +45,7 @@ function normalizeEstado(payload) {
   const progresBase = payload || { grupo1: 0, grupo2: 0, grupo3: 0 };
   return {
     progreso: progresBase,
-    detallGrups: getDetallInicial(progresBase, 20),
+    detallGrups: getDetallInicial(progresBase, 20, llistaPreguntes),
     teDetallServidor: false,
     puntosNecesarios: 20,
     carreraFinalizada: false,
@@ -159,6 +167,7 @@ const CarreraCaballos = () => {
   const navigate = useNavigate();
   const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
   const [detallGrups, setDetallGrups] = useState(getDetallInicial());
+  const [preguntesLlista, setPreguntesLlista] = useState([]);
   const [ganador, setGanador] = useState(null);
   const [tiempo, setTiempo] = useState(0);
   const [enMarcha, setEnMarcha] = useState(false);
@@ -169,6 +178,7 @@ const CarreraCaballos = () => {
   const [reducedMotion, setReducedMotion] = useState(false);
   const sfx = useSfx();
   const progresoPrevRef = useRef(progreso);
+  const preguntesRef = useRef([]);
   const inferDetallFromProgres = useCallback((nouProgres, punts, prevProgres, prevDetall) => {
     const next = { ...prevDetall };
 
@@ -189,6 +199,7 @@ const CarreraCaballos = () => {
 
       next[grup] = {
         preguntaActual: getPreguntaActualFromProgres(actual, punts),
+        enunciatActual: getEnunciatByNumero(getPreguntaActualFromProgres(actual, punts), preguntesRef.current),
         ultimaResposta,
         feedbackToken,
       };
@@ -203,15 +214,25 @@ const CarreraCaballos = () => {
   }, []);
 
   useEffect(() => {
+    preguntesRef.current = preguntesLlista;
+  }, [preguntesLlista]);
+
+  useEffect(() => {
     const loadEstadoInicial = async () => {
       try {
-        const response = await axios.get(`${API_URL}/estado`);
-        const estado = normalizeEstado(response.data);
+        const [estadoResponse, preguntesResponse] = await Promise.all([
+          axios.get(`${API_URL}/estado`),
+          axios.get(`${API_URL}/preguntas`),
+        ]);
+        const llista = Array.isArray(preguntesResponse.data) ? preguntesResponse.data : [];
+        setPreguntesLlista(llista);
+        preguntesRef.current = llista;
+        const estado = normalizeEstado(estadoResponse.data, llista);
         setProgreso(estado.progreso);
         if (estado.teDetallServidor) {
           setDetallGrups(estado.detallGrups);
         } else {
-          setDetallGrups(getDetallInicial(estado.progreso, estado.puntosNecesarios));
+          setDetallGrups(getDetallInicial(estado.progreso, estado.puntosNecesarios, llista));
         }
         setPuntosNecesarios(estado.puntosNecesarios);
       } catch (_err) {
@@ -222,7 +243,7 @@ const CarreraCaballos = () => {
     loadEstadoInicial();
 
     socket.on('actualizarCarrera', (payload) => {
-      const estado = normalizeEstado(payload);
+      const estado = normalizeEstado(payload, preguntesRef.current);
       const prev = progresoPrevRef.current || { grupo1: 0, grupo2: 0, grupo3: 0 };
       setProgreso(estado.progreso);
       if (estado.teDetallServidor) {
@@ -310,7 +331,7 @@ const CarreraCaballos = () => {
     try {
       await axios.post(`${API_URL}/reiniciar`);
       setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 });
-      setDetallGrups(getDetallInicial({ grupo1: 0, grupo2: 0, grupo3: 0 }, puntosNecesarios));
+      setDetallGrups(getDetallInicial({ grupo1: 0, grupo2: 0, grupo3: 0 }, puntosNecesarios, preguntesRef.current));
       setTiempo(0);
       setGanador(null);
       setEnMarcha(false);
@@ -406,7 +427,7 @@ const CarreraCaballos = () => {
               const label = grupo === 'grupo1' ? 'Grup 1' : grupo === 'grupo2' ? 'Grup 2' : 'Grup 3';
               const isLeader = leader === grupo && phase !== 'finished';
               const laneBurst = burst[grupo] || 0;
-              const detail = detallGrups[grupo] || { preguntaActual: 1, ultimaResposta: null, feedbackToken: 0 };
+              const detail = detallGrups[grupo] || { preguntaActual: 1, enunciatActual: null, ultimaResposta: null, feedbackToken: 0 };
 
               return (
                 <article className={`tv-lane ${isLeader ? 'is-leader' : ''}`} key={grupo}>
@@ -418,7 +439,8 @@ const CarreraCaballos = () => {
                           Pregunta {detail.preguntaActual ?? '-'}
                         </span>
                       </h2>
-                      <p>{avance}/{puntosNecesarios}</p>
+                      <p className="tv-question-text">{detail.enunciatActual || "Esperant resposta del grup..."}</p>
+                      <p className="tv-progress-counter">{avance}/{puntosNecesarios}</p>
                     </div>
                     <div className="rhs">
                       {detail.ultimaResposta ? (
