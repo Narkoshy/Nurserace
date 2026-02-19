@@ -167,6 +167,7 @@ const CarreraCaballos = () => {
   const navigate = useNavigate();
   const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
   const [detallGrups, setDetallGrups] = useState(getDetallInicial());
+  const [visibleFeedback, setVisibleFeedback] = useState({ grupo1: null, grupo2: null, grupo3: null });
   const [preguntesLlista, setPreguntesLlista] = useState([]);
   const [ganador, setGanador] = useState(null);
   const [tiempo, setTiempo] = useState(0);
@@ -179,6 +180,9 @@ const CarreraCaballos = () => {
   const sfx = useSfx();
   const progresoPrevRef = useRef(progreso);
   const preguntesRef = useRef([]);
+  const feedbackTokensRef = useRef({ grupo1: 0, grupo2: 0, grupo3: 0 });
+  const feedbackTimersRef = useRef({ grupo1: null, grupo2: null, grupo3: null });
+  const feedbackReadyRef = useRef(false);
   const inferDetallFromProgres = useCallback((nouProgres, punts, prevProgres, prevDetall) => {
     const next = { ...prevDetall };
 
@@ -216,6 +220,44 @@ const CarreraCaballos = () => {
   useEffect(() => {
     preguntesRef.current = preguntesLlista;
   }, [preguntesLlista]);
+
+  useEffect(() => {
+    if (!feedbackReadyRef.current) {
+      for (const grup of Object.keys(feedbackTokensRef.current)) {
+        feedbackTokensRef.current[grup] = detallGrups[grup]?.feedbackToken || 0;
+      }
+      feedbackReadyRef.current = true;
+      return;
+    }
+
+    for (const grup of Object.keys(feedbackTokensRef.current)) {
+      const token = detallGrups[grup]?.feedbackToken || 0;
+      const resposta = detallGrups[grup]?.ultimaResposta || null;
+      const prevToken = feedbackTokensRef.current[grup] || 0;
+
+      if (token <= prevToken) continue;
+
+      feedbackTokensRef.current[grup] = token;
+      setVisibleFeedback((prev) => ({ ...prev, [grup]: resposta }));
+
+      if (feedbackTimersRef.current[grup]) {
+        clearTimeout(feedbackTimersRef.current[grup]);
+      }
+
+      feedbackTimersRef.current[grup] = setTimeout(() => {
+        if ((feedbackTokensRef.current[grup] || 0) !== token) return;
+        setVisibleFeedback((prev) => ({ ...prev, [grup]: null }));
+      }, 2000);
+    }
+  }, [detallGrups]);
+
+  useEffect(() => () => {
+    for (const grup of Object.keys(feedbackTimersRef.current)) {
+      if (feedbackTimersRef.current[grup]) {
+        clearTimeout(feedbackTimersRef.current[grup]);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const loadEstadoInicial = async () => {
@@ -332,6 +374,8 @@ const CarreraCaballos = () => {
       await axios.post(`${API_URL}/reiniciar`);
       setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 });
       setDetallGrups(getDetallInicial({ grupo1: 0, grupo2: 0, grupo3: 0 }, puntosNecesarios, preguntesRef.current));
+      setVisibleFeedback({ grupo1: null, grupo2: null, grupo3: null });
+      feedbackTokensRef.current = { grupo1: 0, grupo2: 0, grupo3: 0 };
       setTiempo(0);
       setGanador(null);
       setEnMarcha(false);
@@ -443,12 +487,12 @@ const CarreraCaballos = () => {
                       <p className="tv-progress-counter">{avance}/{puntosNecesarios}</p>
                     </div>
                     <div className="rhs">
-                      {detail.ultimaResposta ? (
+                      {visibleFeedback[grupo] ? (
                         <span
                           key={`${grupo}-${detail.feedbackToken}`}
-                          className={`tv-result ${detail.ultimaResposta}`}
+                          className={`tv-result ${visibleFeedback[grupo]}`}
                         >
-                          {detail.ultimaResposta === 'correcte' ? 'Correcte' : 'Incorrecte'}
+                          {visibleFeedback[grupo] === 'correcte' ? 'Correcte' : 'Incorrecte'}
                         </span>
                       ) : null}
                       {isLeader ? <span className="badge">LÍDER</span> : null}
