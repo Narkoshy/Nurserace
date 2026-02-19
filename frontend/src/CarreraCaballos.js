@@ -7,10 +7,19 @@ import './CarreraCaballos.css';
 
 const socket = io(API_URL, { transports: ['websocket', 'polling'] });
 
+function getDetallInicial() {
+  return {
+    grupo1: { preguntaActual: 1, ultimaResposta: null, feedbackToken: 0 },
+    grupo2: { preguntaActual: 1, ultimaResposta: null, feedbackToken: 0 },
+    grupo3: { preguntaActual: 1, ultimaResposta: null, feedbackToken: 0 },
+  };
+}
+
 function normalizeEstado(payload) {
   if (payload && payload.progreso) {
     return {
       progreso: payload.progreso,
+      detallGrups: payload.detallGrups || getDetallInicial(),
       puntosNecesarios: payload.puntosNecesarios || 20,
       carreraFinalizada: Boolean(payload.carreraFinalizada),
     };
@@ -18,6 +27,7 @@ function normalizeEstado(payload) {
 
   return {
     progreso: payload || { grupo1: 0, grupo2: 0, grupo3: 0 },
+    detallGrups: getDetallInicial(),
     puntosNecesarios: 20,
     carreraFinalizada: false,
   };
@@ -137,6 +147,7 @@ function useSfx() {
 const CarreraCaballos = () => {
   const navigate = useNavigate();
   const [progreso, setProgreso] = useState({ grupo1: 0, grupo2: 0, grupo3: 0 });
+  const [detallGrups, setDetallGrups] = useState(getDetallInicial());
   const [ganador, setGanador] = useState(null);
   const [tiempo, setTiempo] = useState(0);
   const [enMarcha, setEnMarcha] = useState(false);
@@ -159,6 +170,7 @@ const CarreraCaballos = () => {
         const response = await axios.get(`${API_URL}/estado`);
         const estado = normalizeEstado(response.data);
         setProgreso(estado.progreso);
+        setDetallGrups(estado.detallGrups);
         setPuntosNecesarios(estado.puntosNecesarios);
       } catch (_err) {
         // fallback a valores por defecto
@@ -171,6 +183,7 @@ const CarreraCaballos = () => {
       const estado = normalizeEstado(payload);
       const prev = progresoPrevRef.current || { grupo1: 0, grupo2: 0, grupo3: 0 };
       setProgreso(estado.progreso);
+      setDetallGrups(estado.detallGrups);
       setPuntosNecesarios(estado.puntosNecesarios);
 
       Object.entries(estado.progreso).forEach(([grupo, avance]) => {
@@ -249,6 +262,7 @@ const CarreraCaballos = () => {
     try {
       await axios.post(`${API_URL}/reiniciar`);
       setProgreso({ grupo1: 0, grupo2: 0, grupo3: 0 });
+      setDetallGrups(getDetallInicial());
       setTiempo(0);
       setGanador(null);
       setEnMarcha(false);
@@ -344,15 +358,29 @@ const CarreraCaballos = () => {
               const label = grupo === 'grupo1' ? 'Grup 1' : grupo === 'grupo2' ? 'Grup 2' : 'Grup 3';
               const isLeader = leader === grupo && phase !== 'finished';
               const laneBurst = burst[grupo] || 0;
+              const detail = detallGrups[grupo] || { preguntaActual: 1, ultimaResposta: null, feedbackToken: 0 };
 
               return (
                 <article className={`tv-lane ${isLeader ? 'is-leader' : ''}`} key={grupo}>
                   <div className="tv-lane-head">
                     <div className="lhs">
-                      <h2>{label}</h2>
+                      <h2>
+                        {label}
+                        <span className="tv-question-chip">
+                          Pregunta {detail.preguntaActual ?? '-'}
+                        </span>
+                      </h2>
                       <p>{avance}/{puntosNecesarios}</p>
                     </div>
                     <div className="rhs">
+                      {detail.ultimaResposta ? (
+                        <span
+                          key={`${grupo}-${detail.feedbackToken}`}
+                          className={`tv-result ${detail.ultimaResposta}`}
+                        >
+                          {detail.ultimaResposta === 'correcte' ? 'Correcte' : 'Incorrecte'}
+                        </span>
+                      ) : null}
                       {isLeader ? <span className="badge">LÍDER</span> : null}
                     </div>
                   </div>

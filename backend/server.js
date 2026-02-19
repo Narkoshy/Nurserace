@@ -40,12 +40,53 @@ const seedPreguntas = (() => {
 let preguntas = [];
 let progresoGrupos = { grupo1: 0, grupo2: 0, grupo3: 0 };
 let carreraFinalizada = false;
+let detallGrups = {};
 
 app.use(cors());
 app.use(express.json());
 
 function getPuntosNecesarios() {
   return Math.max(1, preguntas.length);
+}
+
+function getPreguntaInicial() {
+  return preguntas.length > 0 ? 1 : null;
+}
+
+function createDetallGrup() {
+  return {
+    preguntaActual: getPreguntaInicial(),
+    ultimaResposta: null,
+    feedbackToken: 0,
+  };
+}
+
+function createDetallGrups() {
+  return {
+    grupo1: createDetallGrup(),
+    grupo2: createDetallGrup(),
+    grupo3: createDetallGrup(),
+  };
+}
+
+function sincronizarDetallGrups() {
+  const preguntaInicial = getPreguntaInicial();
+  for (const grup of GRUPOS_VALIDOS) {
+    if (!detallGrups[grup]) {
+      detallGrups[grup] = createDetallGrup();
+      continue;
+    }
+
+    if (preguntaInicial === null) {
+      detallGrups[grup].preguntaActual = null;
+      continue;
+    }
+
+    const actual = Number(detallGrups[grup].preguntaActual);
+    if (!Number.isInteger(actual) || actual < 1 || actual > preguntas.length) {
+      detallGrups[grup].preguntaActual = preguntaInicial;
+    }
+  }
 }
 
 function normalizarPregunta(raw) {
@@ -122,6 +163,7 @@ function loadPreguntas() {
 function getEstadoCarrera() {
   return {
     progreso: progresoGrupos,
+    detallGrups,
     carreraFinalizada,
     puntosNecesarios: getPuntosNecesarios(),
   };
@@ -130,6 +172,7 @@ function getEstadoCarrera() {
 function resetCarrera() {
   progresoGrupos = { grupo1: 0, grupo2: 0, grupo3: 0 };
   carreraFinalizada = false;
+  detallGrups = createDetallGrups();
 }
 
 function emitirEstadoCarrera() {
@@ -137,6 +180,7 @@ function emitirEstadoCarrera() {
 }
 
 loadPreguntas();
+resetCarrera();
 
 app.get('/preguntas', (_req, res) => {
   res.json(preguntas);
@@ -151,6 +195,8 @@ app.post('/preguntas', (req, res) => {
   const nuevaPregunta = { ...result.pregunta, id: crypto.randomUUID() };
   preguntas.push(nuevaPregunta);
   savePreguntas();
+  sincronizarDetallGrups();
+  emitirEstadoCarrera();
 
   return res.status(201).json(nuevaPregunta);
 });
@@ -170,6 +216,8 @@ app.put('/preguntas/:id', (req, res) => {
 
   preguntas[index] = result.pregunta;
   savePreguntas();
+  sincronizarDetallGrups();
+  emitirEstadoCarrera();
 
   return res.json(preguntas[index]);
 });
@@ -191,8 +239,10 @@ app.delete('/preguntas/:id', (req, res) => {
 
   if (carreraFinalizada) {
     resetCarrera();
-    emitirEstadoCarrera();
+  } else {
+    sincronizarDetallGrups();
   }
+  emitirEstadoCarrera();
 
   return res.status(204).send();
 });
@@ -230,6 +280,13 @@ app.post('/responder', (req, res) => {
 
   if (acierto) {
     progresoGrupos[grupo] += 1;
+    const siguientePregunta = preguntaIndex + 1 < preguntas.length ? preguntaIndex + 2 : null;
+    detallGrups[grupo] = {
+      ...detallGrups[grupo],
+      preguntaActual: siguientePregunta,
+      ultimaResposta: 'correcte',
+      feedbackToken: (detallGrups[grupo]?.feedbackToken || 0) + 1,
+    };
 
     if (progresoGrupos[grupo] >= getPuntosNecesarios()) {
       carreraFinalizada = true;
@@ -237,6 +294,12 @@ app.post('/responder', (req, res) => {
     }
   } else {
     progresoGrupos[grupo] = 0;
+    detallGrups[grupo] = {
+      ...detallGrups[grupo],
+      preguntaActual: getPreguntaInicial(),
+      ultimaResposta: 'incorrecte',
+      feedbackToken: (detallGrups[grupo]?.feedbackToken || 0) + 1,
+    };
   }
 
   emitirEstadoCarrera();
